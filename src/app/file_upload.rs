@@ -1,5 +1,6 @@
 use leptos::prelude::*;
 use leptos::task::spawn_local;
+use pdf_extract::extract_text_from_mem;
 use server_fn::codec::{MultipartData, MultipartFormData};
 use wasm_bindgen::JsCast;
 use web_sys::{FormData, HtmlFormElement};
@@ -13,9 +14,15 @@ pub async fn upload_file(data: MultipartData) -> Result<String, ServerFnError> {
         let name = field.file_name().unwrap_or_default().to_string();
         println!("Processing file: {}", name);
 
+        let mut buffer = Vec::new();
+
         while let Ok(Some(chunk)) = field.chunk().await {
+            buffer.extend_from_slice(&chunk);
             total_size += chunk.len();
         }
+
+        let text = extract_text_from_mem(&buffer).unwrap();
+        println!("Extracted text: {}", text);
     }
 
     Ok(format!(

@@ -30,6 +30,7 @@ web-sys = { version = "0.3", features = [
 ] }
 multer = "3.0"
 server_fn = { version = "0.7", features = ["serde-lite", "rkyv", "multipart"] }
+pdf-extract = "0.8.0"
 
 [features]
 hydrate = ["leptos/hydrate"]
